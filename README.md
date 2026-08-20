@@ -8,7 +8,7 @@ The repository contains only the two calculations needed for its argument:
 
 1. a controlled reconstruction of a known power law from synthetic CLASS TT
    data; and
-2. a conditional reconstruction from Planck PR3 high-\(\ell\) TT bandpowers.
+2. a conditional reconstruction from Planck PR3 high-$`ll`$ TT bandpowers.
 
 This repository does not introduce a new inversion method.  It supplies CMB
 operators, data vectors and covariances to the unmodified public FrediPy
@@ -17,8 +17,8 @@ solver.
 
 The first calculation checks that the Fredholm inversion recovers the input
 spectrum.  Over the fixed evaluation interval
-\(3\times10^{-4}<k<0.15\,\mathrm{Mpc}^{-1}\), its largest fractional error is
-about \(7.5\times10^{-4}\).  In the Planck example, the flexible posterior mean
+$`3\times10^{-4}<k<0.15\,\mathrm{Mpc}^{-1}`$, its largest fractional error is
+about $`7.5\times10^{-4}`$.  In the Planck example, the flexible posterior mean
 improves the data quadratic only from 218.9 to 218.5 relative to an optimised
 power law.  Across the reported direct-sensitivity range, the two differ by at
 most about 1.24% or 0.48 pointwise posterior standard deviations.
@@ -30,7 +30,7 @@ background cosmology, lensing correction, calibration and covariance are
 fixed.  The baseline Gaussian-process hyperparameters are subjected to a small
 sensitivity scan, but they are not marginalised.  Factor-two variations keep
 the maximum power-law separation below 2.9% and \(\Delta Q\leq1.80\); the more
-permissive \(\gamma=0.5\) case gives 5.38% and \(\Delta Q=3.45\).
+permissive $`\gamma=0.5`$ case gives 5.38% and $`\Delta Q=3.45`$.
 
 ## Run the analysis
 
@@ -79,15 +79,10 @@ vectors and covariances needed by the paper.  They contain no cached posterior:
 `run_analysis.py` reruns the inversion.  Their exact provenance, checksums and
 third-party terms are recorded in [data/README.md](data/README.md).
 
-The earlier `FredIP` experiments and the comprehensive `coreopsis` validation
-repository remain separate.  In particular, this project does not use the
-ambiguous 2023 `prim_k.txt` lineage, compiled CLASS binaries, vendored FrediPy,
-or the large audit products.
-
 ## Terminology
 
 The expected primordial spectrum is described here as a *power law*, or as a
-straight line in \(\ln \mathcal P_{\mathcal R}\) versus \(\ln k\).  “Linear
+straight line in $`\ln \mathcal P_{\mathcal R}`$ versus $`\ln k`$.  “Linear
 power spectrum” is avoided because in cosmology it normally denotes a distinct
 late-time matter statistic.
 
