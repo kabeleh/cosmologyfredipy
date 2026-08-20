@@ -1,0 +1,26 @@
+2026-08-20 13:49:53 info: Congratulations, your extension "Embold" is now active!
+2026-08-20 13:49:53 info: ************* init ****************
+2026-08-20 13:49:53 info: tempDirectory : /home/kl/.vscode/extensions/embold-vscode.embold-0.3.8/temp
+2026-08-20 13:49:54 info: Extraction complete for source: /home/kl/.vscode/extensions/embold-vscode.embold-0.3.8/resources/embold-scanner-archive.zip, destination: /home/kl/.vscode/extensions/embold-vscode.embold-0.3.8/temp
+2026-08-20 13:49:54 info: Extension installed on machine OS : linux
+2026-08-20 13:49:54 info: Loading issues from local database on startup (checkbox unchecked)
+2026-08-20 13:49:54 info: Using emboldDBDir: /home/kl/kDrive/Sci/PhD/Research/cosmologyfredipy/.embold
+2026-08-20 13:49:54 info: NO_PROXY set from VS Code http.noProxy: 
+2026-08-20 13:49:54 info: NODE_TLS_REJECT_UNAUTHORIZED not set (SSL verification enabled)
+2026-08-20 13:49:54 info: Using system certificates for SSL verification
+2026-08-20 13:49:54 info: [STARTUP] Processing 0 total issues from database
+2026-08-20 13:49:54 info: [STARTUP] Issues sorted by file path
+2026-08-20 13:49:54 info: [STARTUP] Complete - Processed: 0, Skipped: 0
+2026-08-20 13:49:54 info: Fetched the issues from DB
+2026-08-20 13:49:54 info: Java version installed on machine : 
+openjdk version "26.0.2.1" 2026-08-18
+OpenJDK Runtime Environment (build 26.0.2.1)
+OpenJDK 64-Bit Server VM (build 26.0.2.1, mixed mode, sharing)
+
+2026-08-20 13:49:54 info: Java installed on machine.
+2026-08-20 13:49:54 info: Embold extension version response:{"hasSupport":false,"version":"0.2.1","changeNotes":"<div> <p>Release Date: 30 Apr, 2025 <br><span>Bug fixes and improvements.</span></p> </div>"}
+2026-08-20 13:49:54 info: Current installed embold extension version : 0.3.8
+2026-08-20 13:49:54 info: Latest embold extension version on marketplace : 0.2.1
+2026-08-20 13:49:54 info: Current extension version: 0.3.8
+2026-08-20 13:49:54 info: Stored extension version: 0.3.8
+2026-08-20 13:49:54 info: No new installation or upgrade detected. Skipping plugin activation tracking.
