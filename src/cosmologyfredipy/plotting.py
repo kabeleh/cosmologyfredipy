@@ -154,6 +154,8 @@ def plot_planck(result: PlanckAnalysis, path: str | Path) -> None:
     )
     bottom.set_xlabel(r"effective multipole $\ell_{\rm eff}$")
     bottom.set_ylabel("residual /\n" + r"reported $\sigma$")
+    # Reserve a data-free strip for the opaque legend above every residual.
+    bottom.set_ylim(top=6.0)
     bottom.legend(
         loc="upper left",
         ncol=2,
