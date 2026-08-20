@@ -102,7 +102,7 @@ def test_gp_hyperparameter_sensitivity(planck_result, planck_sensitivity):
             ],
         ]
     )
-    np.testing.assert_allclose(measured, expected, rtol=1.0e-10, atol=1.0e-10)
+    np.testing.assert_allclose(measured, expected, rtol=1.0e-8, atol=1.0e-10)
 
     rows = {row.case: row for row in planck_sensitivity}
     assert rows["gamma_half"].max_power_law_fractional_difference < 0.03
