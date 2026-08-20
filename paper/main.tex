@@ -1,16 +1,12 @@
 \documentclass[11pt,a4paper]{article}
+\pdfoutput=1
 
-\usepackage[margin=2.45cm]{geometry}
+\usepackage{jcappub}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-\usepackage{amsmath,amssymb,bm}
+\usepackage{bm}
 \usepackage{booktabs}
-\usepackage{graphicx}
-\usepackage{natbib}
-\usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
-\usepackage[font=small,labelfont=bf]{caption}
 
 \newcommand{\PR}{\mathcal P_{\mathcal R}}
 \newcommand{\Mpc}{\mathrm{Mpc}}
@@ -19,20 +15,15 @@
 \hypersetup{
   pdftitle={Reconstructing the primordial power spectrum with FrediPy: a proof of concept},
   pdfauthor={Kay Lehnert},
-  pdfkeywords={primordial power spectrum, CMB, inverse problems, Gaussian processes, Fredholm equations}
+  pdfkeywords={Bayesian reasoning, CMBR theory, cosmological perturbation theory}
 }
 
-\title{\textbf{Reconstructing the primordial power spectrum with FrediPy:\\a proof of concept}}
-\author{Kay Lehnert\\[2pt]
-\small National University of Ireland, Maynooth\\
-\small \href{mailto:k.lehnert@protonmail.com}{k.lehnert@protonmail.com}\quad
-\href{https://orcid.org/0000-0002-2908-8638}{ORCID: 0000-0002-2908-8638}}
-\date{August 2026}
+\title{Reconstructing the primordial power spectrum with FrediPy: a proof of concept}
+\author{Kay Lehnert}
+\affiliation{National University of Ireland, Maynooth}
+\emailAdd{k.lehnert@protonmail.com}
 
-\begin{document}
-\maketitle
-
-\begin{abstract}
+\abstract{
 The CMB temperature spectrum is a linear integral transform of the primordial
 curvature spectrum when the background cosmology and transfer functions are
 fixed.  This makes it a natural test case for FrediPy, a general Python package
@@ -43,18 +34,26 @@ law from synthetic, unlensed CLASS temperature data.  On the fixed range
 $3\times10^{-4}<k<0.15\,\Mpc^{-1}$, the posterior mean differs from the input by
 at most $7.5\times10^{-4}$ fractionally.  We then apply the same public FrediPy
 interface to Planck PR3 high-$\ell$ TT bandpowers, keeping the cosmology,
-lensing template, calibration and Gaussian-process hyperparameters fixed.  On
+lensing template and calibration fixed while varying the Gaussian-process
+hyperparameters in a small sensitivity scan.  At the reference values and on
 the range with direct noise-weighted operator sensitivity, the flexible
 posterior mean differs from its best-fitting power law by at most $1.24\%$ and
-$0.49$ pointwise posterior standard deviations.  Their data quadratics are
-$218.5$ and $218.9$, respectively.  FrediPy therefore passes the controlled
-reconstruction test, while the observational example gives no reason to
-replace a featureless power law in this conditional setting.  The latter is an
-illustration, not a feature-significance or cosmological-parameter analysis.
-\end{abstract}
+$0.48$ pointwise posterior standard deviations.  Their data quadratics are
+$218.5$ and $218.9$, respectively.  Factor-two changes of either RBF
+hyperparameter keep the maximum separation below $2.9\%$.  FrediPy therefore
+passes the controlled reconstruction test, while the observational example
+gives no reason to replace a featureless power law in this conditional setting.
+The latter is an illustration, not a feature-significance or
+cosmological-parameter analysis.
+}
 
-\noindent\textbf{Keywords:} primordial power spectrum; CMB; inverse problems;
-Gaussian processes; Fredholm equations
+\keywords{Bayesian reasoning, CMBR theory, cosmological perturbation theory}
+\compress
+\notoc
+
+\begin{document}
+\maketitle
+\flushbottom
 
 \section{Introduction}
 \label{sec:introduction}
@@ -87,6 +86,13 @@ Although its initial applications concerned spectral functions, neither its
 mathematics nor its software interface is tied to that setting.  The primordial
 spectrum is a particularly clean cosmological example because the unlensed CMB
 spectra are Fredholm integrals of the first kind at fixed cosmology.
+
+Our contribution is deliberately narrow: we do not introduce another
+primordial-spectrum reconstruction algorithm.  Instead, we supply the
+CMB-specific operator, data vector and covariance to the unmodified public
+FrediPy interface.  This provides an inspectable test of whether a general
+Fredholm solver developed for QCD spectral functions can both recover a CLASS
+input and condition on Planck bandpowers.
 
 Here we ask whether FrediPy can recover a known primordial spectrum from CLASS
 and whether the same construction can be
@@ -136,7 +142,7 @@ Figure~\ref{fig:operator} visualises the discretised response.  It also makes
 clear why a CMB experiment constrains a range of $k$, rather than each node
 independently.
 
-\begin{figure}[tb]
+\begin{figure}[htb]
   \centering
   \includegraphics[width=0.92\linewidth]{figures/fredholm_operator.pdf}
   \caption{The discretised synthetic CLASS operator.  Each row maps the
@@ -170,11 +176,12 @@ kernel
  \exp\left[-\frac{(u-u')^2}{2\gamma^2}\right].
  \label{eq:rbf}
 \end{equation}
-Throughout this paper $m=1$, $\sigma_f=1$ and $\gamma=1.5$.  The mean is a
-scale-invariant spectrum, not the tilted power law that we later reconstruct.
-The prior permits smooth departures over order-unity intervals in $\ln k$.
-We fix these values to keep the demonstration reproducible; they should be
-varied or inferred before interpreting structure.
+Our reference choice in both calculations is $m=1$, $\sigma_f=1$ and
+$\gamma=1.5$.  The mean is a scale-invariant spectrum, not the tilted power
+law that we later reconstruct.  The prior permits smooth departures over
+order-unity intervals in $\ln k$.  We keep $m=1$ fixed and vary the two RBF
+hyperparameters in table~\ref{tab:gp-sensitivity}.  A feature analysis should
+instead infer or marginalise over them.
 
 Because equations~\eqref{eq:discrete-forward} and \eqref{eq:rbf} are Gaussian
 and linear, the posterior is analytic \citep{rasmussen2006,valentine2020}:
@@ -201,7 +208,7 @@ the precomputed cosmological quadrature to its public \texttt{Integral} and
 adapter conditions on $\bm y-\bm W\bm m$ and adds $\bm m$ back afterwards.  It
 passes \texttt{cov\_y}$=\bm\Sigma$ as a covariance---not a vector of standard
 deviations.  The repository tests the returned mean and covariance against a
-separate dense Cholesky evaluation of
+separate dense Gaussian evaluation of
 equations~\eqref{eq:posterior-mean}--\eqref{eq:posterior-covariance}.
 
 \section{Controlled reconstruction from CLASS}
@@ -238,7 +245,7 @@ $k$ quadrature.  Its direct forward spectrum agrees with
 \texttt{CLASS.raw\_cl} to a maximum fractional difference of
 $9.42\times10^{-4}$ across the sampled multipoles.
 
-\begin{figure}[tb]
+\begin{figure}[htb]
   \centering
   \includegraphics[width=0.94\linewidth]{figures/synthetic_reconstruction.pdf}
   \caption{Controlled CLASS reconstruction.  The upper panel compares the
@@ -287,7 +294,7 @@ $\PR$ remains linear, at the cost of holding the lensing correction fixed.
 Table~\ref{tab:setups} summarises what changes between the two calculations.
 The same grid, prior and public FrediPy conditioning are used in both.
 
-\begin{table}[tb]
+\begin{table}[htb]
 \centering
 \caption{The two calculations retained in the streamlined analysis.}
 \label{tab:setups}
@@ -301,7 +308,7 @@ Covariance & diagonal, $\sigma_\ell=0.01D_\ell$ & full \texttt{plik\_lite} covar
 Lensing & absent & fixed additive template \\
 Calibration & not applicable & fixed to unity \\
 Cosmology & fixed & fixed \\
-GP hyperparameters & fixed RBF & fixed RBF \\
+GP hyperparameters & fixed RBF & fixed RBF; sensitivity scan \\
 Purpose & recovery of known truth & conditional adequacy check \\
 \bottomrule
 \end{tabular}
@@ -315,11 +322,11 @@ primordial node $j$ is
  s_j=\left\|\bm L^{-1}\bm W_{:j}\right\|_2.
  \label{eq:sensitivity}
 \end{equation}
-We report comparisons where $s_j$ exceeds 1\% of its maximum.  This selects 89
-contiguous nodes over
+We report comparisons where $s_j$ is at least 1\% of its maximum.  This selects
+89 contiguous nodes over the interval, rounded to three significant figures,
 \begin{equation}
- 0.004<k<0.20\,\Mpc^{-1}.
- \label{eq:planck-range}
+ k\in[0.00399,0.204],\Mpc^{-1}.
+\label{eq:planck-range}
 \end{equation}
 The threshold is an explicit reporting convention rather than a confidence
 boundary.
@@ -341,7 +348,7 @@ with $Q=218.90$.  Evaluating the FrediPy posterior mean in the same forward
 model gives $Q=218.51$.  For reference, the unoptimised fiducial power law
 $(A_s,n_s)=(2.1\times10^{-9},0.9649)$ gives $Q=225.37$.
 
-\begin{figure}[tb]
+\begin{figure}[htb]
   \centering
   \includegraphics[width=0.94\linewidth]{figures/planck_reconstruction.pdf}
   \caption{Conditional Planck PR3 reconstruction.  The FrediPy posterior mean
@@ -356,13 +363,48 @@ $(A_s,n_s)=(2.1\times10^{-9},0.9649)$ gives $Q=225.37$.
 
 Within the sensitivity range, the posterior mean and best-fitting power law
 differ by at most $1.24\%$, with a root-mean-square difference of $0.334\%$.
-Their largest pointwise separation is $0.484$ posterior standard deviations,
+Their largest pointwise separation is $0.48$ posterior standard deviations,
 and every retained node lies within one pointwise standard deviation.  As
 figure~\ref{fig:planck} shows, the non-parametric reconstruction is therefore
 pointwise close to a straight line in $\ln\PR$ versus $\ln k$.  The improvement
 $\Delta Q=0.39$ of the flexible posterior mean is small; moreover, $Q$ alone
 does not penalise the freedom of a function.  We consequently do not interpret
 it as evidence for primordial features.
+
+Within this small scan, the qualitative Planck result is not peculiar to the
+reference hyperparameters.  Halving or doubling either RBF hyperparameter
+keeps the maximum separation from the fitted power law below $2.9\%$ and
+$\Delta Q$ at
+or below $1.80$, as table~\ref{tab:gp-sensitivity} shows.  A deliberately
+shorter correlation length, $\gamma=0.5$, permits a $5.38\%$ separation and
+gives $\Delta Q=3.45$.  This is the expected direction: reducing $\gamma$
+admits finer structure.  The scan keeps the cosmology, lensing template,
+calibration, prior mean and reporting range fixed.  It is not a substitute for
+hyperparameter marginalisation or a global feature test.
+
+\begin{table}[htb]
+\centering
+\caption{Hyperparameter sensitivity of the conditional Planck reconstruction.
+The maximum fractional difference between the flexible posterior mean and the
+same best-fitting power law is evaluated over the 89-node sensitivity range.
+All other assumptions are fixed.  The difference
+$\Delta Q=Q_{\rm PL}-Q_{\rm flexible}$ is descriptive; it is neither a
+likelihood-ratio statistic nor a feature-significance measure.}
+\label{tab:gp-sensitivity}
+\small
+\begin{tabular}{ccrc}
+\toprule
+$\sigma_f$ & $\gamma$ & Maximum difference & $\Delta Q$ \\
+\midrule
+1.0 & 1.50 & $1.24\%$ & 0.39 \\
+0.5 & 1.50 & $0.63\%$ & 0.35 \\
+2.0 & 1.50 & $1.48\%$ & 0.41 \\
+1.0 & 0.75 & $2.88\%$ & 1.80 \\
+1.0 & 3.00 & $0.39\%$ & 0.22 \\
+1.0 & 0.50 & $5.38\%$ & 3.45 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Scope of the result}
 \label{sec:scope}
@@ -379,10 +421,11 @@ a parameter constraint or feature search.  The background cosmology,
 calibration and lensing response should be varied jointly with $\PR$; low-$\ell$
 temperature and polarisation information should be included; foreground and
 likelihood approximations should be treated at the level appropriate to the
-experiment; and the kernel family and hyperparameters should be marginalised
-or stress-tested.  Pointwise posterior bands are correlated and do not define
-a global feature test.  The Gaussian prior also does not enforce positivity,
-although the posterior means shown here remain positive.
+experiment; and the kernel family should be varied.  The small sensitivity
+scan above does not replace hyperparameter marginalisation.  Pointwise
+posterior bands are correlated and do not define a global feature test.  The
+Gaussian prior also does not enforce positivity, although the posterior means
+shown here remain positive.
 
 A fixed smoothness prior can suppress narrow features, while a more permissive
 prior can fit fluctuations without making them significant.  Individual
@@ -407,6 +450,8 @@ $7.5\times10^{-4}$ on the fixed interval.  Applying the same interface to
 Planck high-$\ell$ TT gives a posterior mean close to a fitted power law over
 the range with direct operator sensitivity.  In this fixed setup, a featureless
 power law explains the bandpowers about as well as the flexible posterior mean.
+Changing the RBF hyperparameters alters the visible departures, as expected,
+but the small scan does not turn them into a feature-significance result.
 
 This example shows that FrediPy can perform the primordial-spectrum
 reconstruction and provides a reproducible starting point for a later joint
@@ -424,16 +469,16 @@ repository.  The software is released under the MIT licence; the Planck-derived
 input retains its separate upstream terms.  FrediPy~0.2.1 and CLASS~3.3.4 are
 cited explicitly \citep{fredipy,blas2011}.
 
-\section*{Acknowledgements}
+\acknowledgments
 
 The author acknowledges support from the John and Pat Hume Scholarship, the
 Swiss Study Foundation and the Friedrich Naumann Foundation for Freedom.
-OpenAI Codex was used in August 2026 to assist with repository restructuring,
-numerical cross-checks and language editing under the author's supervision.
-The scientific choices, verification and final manuscript remain the author's
-responsibility.
+OpenAI Codex (GPT-5), including delegated Codex agents, was used in August 2026
+for repository restructuring, code development, numerical analysis and
+cross-checks, and manuscript drafting and editing.  We remain responsible for
+the scientific content, code and final manuscript.
 
-\bibliographystyle{unsrtnat}
+\bibliographystyle{JHEP}
 \bibliography{refs}
 
 \end{document}

@@ -6,7 +6,6 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED = {
     Path("data/synthetic_class.npz"): (

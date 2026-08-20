@@ -13,7 +13,6 @@ from scipy.optimize import least_squares
 
 from .inversion import Posterior, invert
 
-
 SYNTHETIC_KEYS = (
     "a0",
     "gp_sigma",
@@ -45,6 +44,17 @@ PLANCK_KEYS = (
 )
 
 SENSITIVITY_THRESHOLD = 0.01
+
+# In FrediPy 0.2.1 the first RBF argument is named ``variance``, but the
+# implemented covariance is sigma_f**2 exp[-(u-u')**2 / (2 gamma**2)].
+GP_SENSITIVITY_SETTINGS = (
+    ("baseline", 1.0, 1.5),
+    ("sigma_f_half", 0.5, 1.5),
+    ("sigma_f_double", 2.0, 1.5),
+    ("gamma_half", 1.0, 0.75),
+    ("gamma_double", 1.0, 3.0),
+    ("gamma_aggressive", 1.0, 0.5),
+)
 
 
 @dataclass(frozen=True)
@@ -91,12 +101,42 @@ class PlanckAnalysis:
     max_power_law_fractional_difference: float
     rms_power_law_fractional_difference: float
     max_power_law_difference_sigma: float
+    gp_sigma: float
+    gp_gamma: float
 
     @property
     def delta_q(self) -> float:
         """Power-law Q minus flexible-reconstruction Q."""
 
         return self.power_law.q - self.q_flexible
+
+
+@dataclass(frozen=True)
+class PlanckSensitivityRow:
+    """One fixed-mask comparison for a choice of RBF hyperparameters."""
+
+    case: str
+    sigma_f: float
+    gamma: float
+    q_flexible: float
+    delta_q_power_law_minus_flexible: float
+    max_power_law_fractional_difference: float
+    max_power_law_difference_sigma: float
+
+    def as_dict(self) -> dict[str, str | float]:
+        """Return the row in the stable JSON schema used by the runner."""
+
+        return {
+            "case": self.case,
+            "delta_q_power_law_minus_flexible": (self.delta_q_power_law_minus_flexible),
+            "gamma": self.gamma,
+            "max_power_law_difference_sigma": self.max_power_law_difference_sigma,
+            "max_power_law_fractional_difference": (
+                self.max_power_law_fractional_difference
+            ),
+            "q_flexible": self.q_flexible,
+            "sigma_f": self.sigma_f,
+        }
 
 
 def _load_npz(path: str | Path, required: tuple[str, ...]) -> dict[str, np.ndarray]:
@@ -215,7 +255,12 @@ def _fit_power_law(
     )
 
 
-def analyse_planck(path: str | Path) -> PlanckAnalysis:
+def analyse_planck(
+    path: str | Path,
+    *,
+    gp_sigma: float | None = None,
+    gp_gamma: float | None = None,
+) -> PlanckAnalysis:
     """Run the fixed-calibration Planck PR3 TT reconstruction.
 
     The fixed lensing template is subtracted from the observed band powers
@@ -230,6 +275,12 @@ def analyse_planck(path: str | Path) -> PlanckAnalysis:
     lensing = np.asarray(arrays["lensing_template_bandpowers"], dtype=float)
     covariance = np.asarray(arrays["band_covariance"], dtype=float)
     conditional = observed - lensing
+    selected_sigma = (
+        _scalar(arrays, "gp_sigma") if gp_sigma is None else float(gp_sigma)
+    )
+    selected_gamma = (
+        _scalar(arrays, "gp_gamma") if gp_gamma is None else float(gp_gamma)
+    )
 
     posterior = invert(
         operator,
@@ -237,8 +288,8 @@ def analyse_planck(path: str | Path) -> PlanckAnalysis:
         conditional,
         covariance,
         amplitude_scale=a0,
-        gp_sigma=_scalar(arrays, "gp_sigma"),
-        gp_gamma=_scalar(arrays, "gp_gamma"),
+        gp_sigma=selected_sigma,
+        gp_gamma=selected_gamma,
         prior_mean=a0,
     )
     whiten = _whitener(covariance)
@@ -282,38 +333,90 @@ def analyse_planck(path: str | Path) -> PlanckAnalysis:
             np.sqrt(np.mean(np.square(fractional_difference[mask])))
         ),
         max_power_law_difference_sigma=float(np.max(difference_sigma[mask])),
+        gp_sigma=selected_sigma,
+        gp_gamma=selected_gamma,
     )
+
+
+def analyse_planck_sensitivity(
+    path: str | Path,
+    baseline: PlanckAnalysis | None = None,
+) -> tuple[PlanckSensitivityRow, ...]:
+    """Evaluate the declared RBF hyperparameters against one fixed baseline.
+
+    Every row uses the baseline power-law fit and baseline operator-sensitivity
+    mask.  The data, covariance, fixed lensing template, calibration, prior
+    mean, and all other assumptions are unchanged.
+    """
+
+    baseline = analyse_planck(path) if baseline is None else baseline
+    rows = []
+    for case, sigma_f, gamma in GP_SENSITIVITY_SETTINGS:
+        if sigma_f == baseline.gp_sigma and gamma == baseline.gp_gamma:
+            result = baseline
+        else:
+            result = analyse_planck(path, gp_sigma=sigma_f, gp_gamma=gamma)
+        mask = baseline.sensitivity_mask
+        fractional_difference = (
+            result.posterior.mean / baseline.power_law.spectrum - 1.0
+        )
+        difference_sigma = (
+            np.abs(result.posterior.mean - baseline.power_law.spectrum)
+            / result.posterior.sigma
+        )
+        rows.append(
+            PlanckSensitivityRow(
+                case=case,
+                sigma_f=sigma_f,
+                gamma=gamma,
+                q_flexible=result.q_flexible,
+                delta_q_power_law_minus_flexible=(
+                    baseline.power_law.q - result.q_flexible
+                ),
+                max_power_law_fractional_difference=float(
+                    np.max(np.abs(fractional_difference[mask]))
+                ),
+                max_power_law_difference_sigma=float(np.max(difference_sigma[mask])),
+            )
+        )
+    return tuple(rows)
 
 
 def make_summary(
     synthetic: SyntheticAnalysis,
     planck: PlanckAnalysis,
+    planck_sensitivity: tuple[PlanckSensitivityRow, ...] | None = None,
 ) -> dict[str, Any]:
     """Return the small, JSON-ready set of numbers quoted in the paper."""
 
     direct_k = planck.posterior.k_per_mpc[planck.sensitivity_mask]
+    planck_summary = {
+        "a_planck_fixed": 1.0,
+        "delta_q_power_law_minus_flexible": planck.delta_q,
+        "direct_sensitivity_k_max_per_mpc": float(direct_k[-1]),
+        "direct_sensitivity_k_min_per_mpc": float(direct_k[0]),
+        "direct_sensitivity_nodes": int(direct_k.size),
+        "sensitivity_threshold_fraction_of_peak": SENSITIVITY_THRESHOLD,
+        "max_power_law_fractional_difference": (
+            planck.max_power_law_fractional_difference
+        ),
+        "max_power_law_difference_sigma": planck.max_power_law_difference_sigma,
+        "number_of_bands": int(planck.ell_eff.size),
+        "power_law_amplitude": planck.power_law.amplitude,
+        "power_law_pivot_per_mpc": planck.power_law.pivot_per_mpc,
+        "power_law_spectral_index": planck.power_law.spectral_index,
+        "q_flexible": planck.q_flexible,
+        "q_power_law": planck.power_law.q,
+        "rms_power_law_fractional_difference": (
+            planck.rms_power_law_fractional_difference
+        ),
+    }
+    if planck_sensitivity is not None:
+        planck_summary["gp_hyperparameter_sensitivity"] = [
+            row.as_dict() for row in planck_sensitivity
+        ]
     return {
-        "planck": {
-            "a_planck_fixed": 1.0,
-            "delta_q_power_law_minus_flexible": planck.delta_q,
-            "direct_sensitivity_k_max_per_mpc": float(direct_k[-1]),
-            "direct_sensitivity_k_min_per_mpc": float(direct_k[0]),
-            "direct_sensitivity_nodes": int(direct_k.size),
-            "sensitivity_threshold_fraction_of_peak": SENSITIVITY_THRESHOLD,
-            "max_power_law_fractional_difference": (
-                planck.max_power_law_fractional_difference
-            ),
-            "max_power_law_difference_sigma": planck.max_power_law_difference_sigma,
-            "number_of_bands": int(planck.ell_eff.size),
-            "power_law_amplitude": planck.power_law.amplitude,
-            "power_law_pivot_per_mpc": planck.power_law.pivot_per_mpc,
-            "power_law_spectral_index": planck.power_law.spectral_index,
-            "q_flexible": planck.q_flexible,
-            "q_power_law": planck.power_law.q,
-            "rms_power_law_fractional_difference": (
-                planck.rms_power_law_fractional_difference
-            ),
-        },
+        "planck": planck_summary,
         "synthetic": {
             "evaluation_nodes": int(np.count_nonzero(synthetic.evaluation_mask)),
             "max_interior_fractional_error": synthetic.max_interior_fractional_error,

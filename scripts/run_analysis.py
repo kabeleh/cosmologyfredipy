@@ -10,14 +10,18 @@ import matplotlib
 
 matplotlib.use("Agg")
 
-from cosmologyfredipy.analysis import (  # noqa: E402
+from cosmologyfredipy.analysis import (
     analyse_planck,
+    analyse_planck_sensitivity,
     analyse_synthetic,
     make_summary,
     write_summary,
 )
-from cosmologyfredipy.plotting import plot_operator, plot_planck, plot_synthetic  # noqa: E402
-
+from cosmologyfredipy.plotting import (
+    plot_operator,
+    plot_planck,
+    plot_synthetic,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,13 +54,15 @@ def main() -> int:
 
     synthetic = analyse_synthetic(args.synthetic)
     planck = analyse_planck(args.planck)
+    planck_sensitivity = analyse_planck_sensitivity(args.planck, baseline=planck)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.figure_dir.mkdir(parents=True, exist_ok=True)
     plot_operator(synthetic, args.figure_dir / "fredholm_operator.pdf")
     plot_synthetic(synthetic, args.figure_dir / "synthetic_reconstruction.pdf")
     plot_planck(planck, args.figure_dir / "planck_reconstruction.pdf")
     text = write_summary(
-        args.output_dir / "summary.json", make_summary(synthetic, planck)
+        args.output_dir / "summary.json",
+        make_summary(synthetic, planck, planck_sensitivity),
     )
     print(text, end="")
     return 0

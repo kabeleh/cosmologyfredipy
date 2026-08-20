@@ -5,6 +5,62 @@
     "direct_sensitivity_k_max_per_mpc": 0.20360792109517958,
     "direct_sensitivity_k_min_per_mpc": 0.003994964211889526,
     "direct_sensitivity_nodes": 89,
+    "gp_hyperparameter_sensitivity": [
+      {
+        "case": "baseline",
+        "delta_q_power_law_minus_flexible": 0.39215663792649025,
+        "gamma": 1.5,
+        "max_power_law_difference_sigma": 0.4841369148231625,
+        "max_power_law_fractional_difference": 0.012396814772795972,
+        "q_flexible": 218.51071345521,
+        "sigma_f": 1.0
+      },
+      {
+        "case": "sigma_f_half",
+        "delta_q_power_law_minus_flexible": 0.3477973610417564,
+        "gamma": 1.5,
+        "max_power_law_difference_sigma": 0.4418112927070447,
+        "max_power_law_fractional_difference": 0.006251784718123821,
+        "q_flexible": 218.55507273209474,
+        "sigma_f": 0.5
+      },
+      {
+        "case": "sigma_f_double",
+        "delta_q_power_law_minus_flexible": 0.41147392582615794,
+        "gamma": 1.5,
+        "max_power_law_difference_sigma": 0.48562231291546415,
+        "max_power_law_fractional_difference": 0.01477051514973926,
+        "q_flexible": 218.49139616731034,
+        "sigma_f": 2.0
+      },
+      {
+        "case": "gamma_half",
+        "delta_q_power_law_minus_flexible": 1.7987601338787442,
+        "gamma": 0.75,
+        "max_power_law_difference_sigma": 0.9327436602187189,
+        "max_power_law_fractional_difference": 0.02876819288116539,
+        "q_flexible": 217.10410995925776,
+        "sigma_f": 1.0
+      },
+      {
+        "case": "gamma_double",
+        "delta_q_power_law_minus_flexible": 0.21808872279154912,
+        "gamma": 3.0,
+        "max_power_law_difference_sigma": 0.3073854709693377,
+        "max_power_law_fractional_difference": 0.0038736504958100104,
+        "q_flexible": 218.68478137034495,
+        "sigma_f": 1.0
+      },
+      {
+        "case": "gamma_aggressive",
+        "delta_q_power_law_minus_flexible": 3.451357760570801,
+        "gamma": 0.5,
+        "max_power_law_difference_sigma": 1.3401155466857004,
+        "max_power_law_fractional_difference": 0.05381621084895194,
+        "q_flexible": 215.4515123325657,
+        "sigma_f": 1.0
+      }
+    ],
     "max_power_law_difference_sigma": 0.4841369148231625,
     "max_power_law_fractional_difference": 0.012396814772795972,
     "number_of_bands": 215,

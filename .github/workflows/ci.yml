@@ -37,7 +37,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends \
-            latexmk poppler-utils qpdf texlive-fonts-recommended texlive-latex-extra
+            latexmk lmodern poppler-utils qpdf texlive-fonts-recommended \
+            texlive-latex-extra
       - name: Build and check paper
         run: |
           sh paper/build.sh

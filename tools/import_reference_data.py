@@ -14,7 +14,6 @@ from pathlib import Path
 
 import numpy as np
 
-
 SYNTHETIC_SHA256 = "eaffd50c40c832a74f5407a30ec87096fd4b18f4197b350afdb70eb75b4c3183"
 PLANCK_SHA256 = "9708a48308994f2c7fe5808e1f50256c8dbad9c1f17ee59d2a617e645000e3c0"
 

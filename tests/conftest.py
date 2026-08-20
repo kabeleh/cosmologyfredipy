@@ -2,8 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from cosmologyfredipy.analysis import analyse_planck, analyse_synthetic
-
+from cosmologyfredipy.analysis import (
+    analyse_planck,
+    analyse_planck_sensitivity,
+    analyse_synthetic,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -16,3 +19,10 @@ def synthetic_result():
 @pytest.fixture(scope="session")
 def planck_result():
     return analyse_planck(ROOT / "data" / "planck_pr3_tt.npz")
+
+
+@pytest.fixture(scope="session")
+def planck_sensitivity(planck_result):
+    return analyse_planck_sensitivity(
+        ROOT / "data" / "planck_pr3_tt.npz", baseline=planck_result
+    )

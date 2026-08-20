@@ -1,0 +1,102 @@
+
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{10}
+
+\bibitem{planck2018vi}
+{Planck Collaboration}, \emph{{P}lanck 2018 results. {VI}. cosmological
+  parameters}, \href{https://doi.org/10.1051/0004-6361/201833910}{\emph{Astron.
+  Astrophys.} {\bfseries 641} (2020) A6}
+  [\href{https://arxiv.org/abs/1807.06209}{{\ttfamily 1807.06209}}].
+
+\bibitem{planck2018x}
+{Planck Collaboration}, \emph{{P}lanck 2018 results. {X}. constraints on
+  inflation}, \href{https://doi.org/10.1051/0004-6361/201833887}{\emph{Astron.
+  Astrophys.} {\bfseries 641} (2020) A10}
+  [\href{https://arxiv.org/abs/1807.06211}{{\ttfamily 1807.06211}}].
+
+\bibitem{shafieloo2004}
+A.~Shafieloo and T.~Souradeep, \emph{Primordial power spectrum from {WMAP}},
+  \href{https://doi.org/10.1103/PhysRevD.70.043523}{\emph{Phys. Rev. D}
+  {\bfseries 70} (2004) 043523}
+  [\href{https://arxiv.org/abs/astro-ph/0312174}{{\ttfamily
+  astro-ph/0312174}}].
+
+\bibitem{gauthier2012}
+C.~Gauthier and M.~Bucher, \emph{Reconstructing the primordial power spectrum
+  from the {CMB}},
+  \href{https://doi.org/10.1088/1475-7516/2012/10/050}{\emph{JCAP} {\bfseries
+  2012} (2012) 050} [\href{https://arxiv.org/abs/1209.2147}{{\ttfamily
+  1209.2147}}].
+
+\bibitem{hunt2014}
+P.~Hunt and S.~Sarkar, \emph{Reconstruction of the primordial power spectrum of
+  curvature perturbations using multiple data sets},
+  \href{https://doi.org/10.1088/1475-7516/2014/01/025}{\emph{JCAP} {\bfseries
+  2014} (2014) 025} [\href{https://arxiv.org/abs/1308.2317}{{\ttfamily
+  1308.2317}}].
+
+\bibitem{sohn2022}
+W.~Sohn, A.~Shafieloo and D.K.~Hazra, \emph{Deblurring the early {U}niverse:
+  Reconstruction of primordial power spectrum from {P}lanck {CMB} using image
+  analysis techniques},
+  \href{https://doi.org/10.1088/1475-7516/2024/03/056}{\emph{JCAP} {\bfseries
+  2024} (2024) 056} [\href{https://arxiv.org/abs/2211.15139}{{\ttfamily
+  2211.15139}}].
+
+\bibitem{raffaelli2025}
+A.~Raffaelli and M.~Ballardini, \emph{Knot reconstruction of the scalar
+  primordial power spectrum with {P}lanck, {ACT}, and {SPT} {CMB} data},
+  \href{https://doi.org/10.1088/1475-7516/2025/07/077}{\emph{JCAP} {\bfseries
+  2025} (2025) 077} [\href{https://arxiv.org/abs/2503.10609}{{\ttfamily
+  2503.10609}}].
+
+\bibitem{chaki2025}
+S.~Chaki, A.~Nicola, A.~Spurio~Mancini, D.~Piras and R.~Reischke,
+  \emph{Constraining the primordial power spectrum using a differentiable
+  likelihood}, \href{https://doi.org/10.1088/1475-7516/2025/08/068}{\emph{JCAP}
+  {\bfseries 2025} (2025) 068}
+  [\href{https://arxiv.org/abs/2503.00108}{{\ttfamily 2503.00108}}].
+
+\bibitem{fredipy}
+J.~Turnwald, J.M.~Urban and N.~Wink, ``{FrediPy}: {F}redholm inversion in
+  {P}ython.'' \href{https://github.com/JonasTurnwald/fredipy}{GitHub
+  repository}, version 0.2.1, source commit
+  \href{https://github.com/JonasTurnwald/fredipy/commit/efcb92f146dc098609415cd81965460df770de60}{\texttt{efcb92f}},
+  2026.
+
+\bibitem{horak2022}
+J.~Horak, J.M.~Pawlowski, J.~Rodr\'{i}guez-Quintero, J.~Turnwald, J.M.~Urban,
+  N.~Wink et~al., \emph{Reconstructing {QCD} spectral functions with {G}aussian
+  processes}, \href{https://doi.org/10.1103/PhysRevD.105.036014}{\emph{Phys.
+  Rev. D} {\bfseries 105} (2022) 036014}
+  [\href{https://arxiv.org/abs/2107.13464}{{\ttfamily 2107.13464}}].
+
+\bibitem{blas2011}
+D.~Blas, J.~Lesgourgues and T.~Tram, \emph{The cosmic linear anisotropy solving
+  system ({CLASS}). {Part II}: Approximation schemes},
+  \href{https://doi.org/10.1088/1475-7516/2011/07/034}{\emph{JCAP} {\bfseries
+  2011} (2011) 034} [\href{https://arxiv.org/abs/1104.2933}{{\ttfamily
+  1104.2933}}].
+
+\bibitem{rasmussen2006}
+C.E.~Rasmussen and C.K.I.~Williams, \emph{Gaussian Processes for Machine
+  Learning}, MIT Press, Cambridge, Massachusetts (2006).
+
+\bibitem{valentine2020}
+A.P.~Valentine and M.~Sambridge, \emph{{G}aussian process models---{I}. a
+  framework for probabilistic continuous inverse theory},
+  \href{https://doi.org/10.1093/gji/ggz520}{\emph{Geophys. J. Int.} {\bfseries
+  220} (2020) 1632}.
+
+\bibitem{planck2018v}
+{Planck Collaboration}, \emph{{P}lanck 2018 results. {V}. {CMB} power spectra
+  and likelihoods},
+  \href{https://doi.org/10.1051/0004-6361/201936386}{\emph{Astron. Astrophys.}
+  {\bfseries 641} (2020) A5}
+  [\href{https://arxiv.org/abs/1907.12875}{{\ttfamily 1907.12875}}].
+
+\bibitem{planckpr3data}
+{European Space Agency}, ``{Planck PR3} cosmology products.'' Version PR3,
+  European Space Agency, 2018.
+\newblock 10.5270/esa-gb3sw1a.
+
+\end{thebibliography}\endgroup

@@ -10,19 +10,27 @@ The repository contains only the two calculations needed for its argument:
    data; and
 2. a conditional reconstruction from Planck PR3 high-\(\ell\) TT bandpowers.
 
+This repository does not introduce a new inversion method.  It supplies CMB
+operators, data vectors and covariances to the unmodified public FrediPy
+interface, so the CLASS and Planck examples use the same general Fredholm
+solver.
+
 The first calculation checks that the Fredholm inversion recovers the input
 spectrum.  Over the fixed evaluation interval
 \(3\times10^{-4}<k<0.15\,\mathrm{Mpc}^{-1}\), its largest fractional error is
 about \(7.5\times10^{-4}\).  In the Planck example, the flexible posterior mean
 improves the data quadratic only from 218.9 to 218.5 relative to an optimised
-power law.  Across the operator-supported range, the two differ by at most
-about 1.24% or 0.49 posterior standard deviations.
+power law.  Across the reported direct-sensitivity range, the two differ by at
+most about 1.24% or 0.48 pointwise posterior standard deviations.
 
 These numbers show that FrediPy can perform the reconstruction and that a
 featureless primordial power law remains adequate in this worked observational
 example.  They are not a feature-significance or model-selection result: the
-background cosmology, lensing correction, calibration, covariance and Gaussian
-process hyperparameters are fixed.
+background cosmology, lensing correction, calibration and covariance are
+fixed.  The baseline Gaussian-process hyperparameters are subjected to a small
+sensitivity scan, but they are not marginalised.  Factor-two variations keep
+the maximum power-law separation below 2.9% and \(\Delta Q\leq1.80\); the more
+permissive \(\gamma=0.5\) case gives 5.38% and \(\Delta Q=3.45\).
 
 ## Run the analysis
 
@@ -54,6 +62,11 @@ latexmk -pdf main.tex
 
 or use `make analysis`, `make test`, and `make paper` after installing the
 package.
+
+The manuscript uses the official JCAP `jcappub.sty` and `JHEP.bst` files,
+which are kept in `paper/` so that the build is self-contained.  The generated
+`paper/main.bbl` is retained because JCAP requests it in BibTeX submission
+archives.
 
 ## What is stored here
 

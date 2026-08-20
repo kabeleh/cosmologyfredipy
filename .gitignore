@@ -12,6 +12,7 @@ dist/
 # LaTeX build products (the final PDF is kept visible).
 paper/*.aux
 paper/*.bbl
+!paper/main.bbl
 paper/*.bcf
 paper/*.blg
 paper/*.fdb_latexmk

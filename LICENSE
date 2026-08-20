@@ -22,3 +22,8 @@ SOFTWARE.
 
 This licence applies to the repository's original software and documentation.
 It does not relicense the third-party data described in data/README.md.
+
+The files paper/jcappub.sty and paper/JHEP.bst are copyright SISSA Medialab
+and distributed under the LaTeX Project Public License, version 1.3 or (at
+your option) any later version, as stated in their file headers. They are not
+covered by the MIT licence above.

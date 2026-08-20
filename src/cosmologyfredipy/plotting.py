@@ -9,7 +9,6 @@ import numpy as np
 
 from .analysis import PlanckAnalysis, SyntheticAnalysis
 
-
 # Keep text editable and avoid Type 3 bitmap fonts in journal PDFs.
 plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
 
