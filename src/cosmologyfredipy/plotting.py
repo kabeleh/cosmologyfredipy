@@ -141,7 +141,7 @@ def plot_planck(result: PlanckAnalysis, path: str | Path) -> None:
         color=BLUE,
         s=11,
         marker="o",
-        label="flexible",
+        label="FrediPy posterior",
     )
     bottom.scatter(
         result.ell_eff,
@@ -150,10 +150,17 @@ def plot_planck(result: PlanckAnalysis, path: str | Path) -> None:
         edgecolors=ORANGE,
         s=17,
         marker="s",
-        label="power law",
+        label="best-fit power law",
     )
     bottom.set_xlabel(r"effective multipole $\ell_{\rm eff}$")
     bottom.set_ylabel("residual /\n" + r"reported $\sigma$")
-    bottom.legend(frameon=False, ncol=2)
+    bottom.legend(
+        loc="upper left",
+        ncol=2,
+        frameon=True,
+        facecolor="white",
+        edgecolor="0.65",
+        framealpha=1.0,
+    )
     bottom.grid(alpha=0.2)
     _save(fig, path)
