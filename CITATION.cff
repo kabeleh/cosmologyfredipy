@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this proof of concept, please cite the software and its accompanying paper."
+title: "Cosmology with FrediPy: primordial-spectrum reconstruction"
+type: software
+authors:
+  - family-names: Lehnert
+    given-names: Kay
+    orcid: "https://orcid.org/0000-0002-2908-8638"
+repository-code: "https://github.com/kabeleh/cosmologyfredipy"
+license: MIT
+version: 0.1.0
+date-released: 2026-08-20

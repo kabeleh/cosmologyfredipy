@@ -1,0 +1,27 @@
+{
+  "planck": {
+    "a_planck_fixed": 1.0,
+    "delta_q_power_law_minus_flexible": 0.39215663792649025,
+    "direct_sensitivity_k_max_per_mpc": 0.20360792109517958,
+    "direct_sensitivity_k_min_per_mpc": 0.003994964211889526,
+    "direct_sensitivity_nodes": 89,
+    "max_power_law_difference_sigma": 0.4841369148231625,
+    "max_power_law_fractional_difference": 0.012396814772795972,
+    "number_of_bands": 215,
+    "power_law_amplitude": 2.0942724213157843e-09,
+    "power_law_pivot_per_mpc": 0.05,
+    "power_law_spectral_index": 0.9610545081975165,
+    "q_flexible": 218.51071345521,
+    "q_power_law": 218.9028700931365,
+    "rms_power_law_fractional_difference": 0.003342774073185317,
+    "sensitivity_threshold_fraction_of_peak": 0.01
+  },
+  "synthetic": {
+    "evaluation_nodes": 139,
+    "max_interior_fractional_error": 0.0007457795099484743,
+    "max_kernel_closure_fraction": 0.0009417578042183461,
+    "median_interior_fractional_error": 0.0003734592485737931,
+    "number_of_multipoles": 125,
+    "rms_interior_fractional_error": 0.0004161537844372716
+  }
+}
