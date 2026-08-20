@@ -52,6 +52,10 @@ Then reproduce the numerical summaries and all paper figures:
 The script writes `results/summary.json` and the three PDFs in
 `paper/figures/`.  It conditions both examples through the public FrediPy
 0.2.1 API; the tests compare its output with direct Gaussian conditioning.
+The last floating-point digits in `summary.json` can depend on the BLAS
+implementation: across the tested CPU kernels, the sensitivity diagnostics
+agree within roughly \(5\times10^{-8}\) relative, and this variation changes
+none of the values quoted in the paper.
 
 Build the manuscript with
 
